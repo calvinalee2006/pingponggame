@@ -1,7 +1,11 @@
+var canvasContent;
+ballX = 50;
+var ballSpeedX = 5;
+
+
 window.onload = function () {
     canvas = document.getElementById('gameCanvas');
     canvasContext = canvas.getContext('2d');
-    ballX = 50;
 
     var framesPerSecond = 30;
     setInterval(function () {
@@ -11,15 +15,36 @@ window.onload = function () {
 }
 
 function moveEverything() {
-    ballX = ballX + 5;
+    ballX = ballX + ballSpeedX;
+    if (ballX < 0) {
+        ballSpeedX = -ballSpeedX;
+    }
+    if (ballX > canvas.width) {
+        ballSpeedX = -ballSpeedX;
+    }
 }
 
 function drawEverything() {
+    // Next line blanks out the screen with black
+    colorRect(0, 0, canvas.width, canvas.height, 'black');
 
-    canvasContext.fillStyle = 'black';
-    canvasContext.fillRect(0, 0, canvas.width, canvas.height);
-    canvasContext.fillStyle = 'white';
-    canvasContext.fillRect(0, 210, 10, 200)
-    canvasContext.fillStyle = 'red';
-    canvasContext.fillRect(ballX, 100, 10, 10);
+    //This is left player paddle
+    colorRect(0, 210, 10, 100, 'white');
+
+    //next line draws the ball
+    colorCircle(ballX, 150, 10, 'white')
+
+
+}
+
+function colorCircle(centerX, centerY, radius, drawColor) {
+    colorRect(ballX, 100, 10, 10, 'drawColor');
+    canvasContext.beginPath();
+    canvasContext.arc(centerX, centerY, radius, 0, Math.PI * 2, true);
+    canvasContext.fill();
+}
+
+function colorRect(leftX, topY, width, height, drawColor) {
+    canvasContext.fillStyle = drawColor;
+    canvasContext.fillRect(leftX, topY, width, height);
 }
